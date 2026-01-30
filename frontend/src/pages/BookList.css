@@ -1,0 +1,260 @@
+.book-list-container {
+  width: 100%;
+}
+
+.book-list-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 24px;
+}
+
+.books-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.books-table thead {
+  background: #667eea;
+  color: white;
+}
+
+.books-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.books-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 0.2s;
+}
+
+.books-table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.books-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.books-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #2d3748;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.book-id {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.book-name {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.author-name {
+  color: #4a5568;
+}
+
+.isbn {
+  font-family: 'Courier New', monospace;
+  color: #718096;
+}
+
+.price {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.quantity {
+  color: #4a5568;
+}
+
+.actions {
+  text-align: center;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background: #f7fafc;
+}
+
+.loading-state {
+  max-width: 1200px;
+  margin: 80px auto;
+  text-align: center;
+  color: #718096;
+}
+
+.spinner {
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.empty-state {
+  max-width: 500px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.empty-state h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: #718096;
+  margin-bottom: 24px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.pagination-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #667eea;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 6px;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #f0f4ff;
+  color: #5568d3;
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: #a0aec0;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 8px;
+}
+
+.page-number {
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #667eea;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.page-number:hover {
+  background: #f0f4ff;
+}
+
+.page-number.active {
+  background: #667eea;
+  color: white;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #718096;
+  font-weight: 400;
+  margin-left: 12px;
+}
+
+.btn-primary {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 768px) {
+  .book-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .books-table-container {
+    overflow-x: auto;
+  }
+
+  .books-table {
+    min-width: 600px;
+  }
+
+  .books-table th,
+  .books-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pagination-button {
+    width: 100%;
+  }
+}
