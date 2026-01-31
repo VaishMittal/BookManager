@@ -48,10 +48,10 @@ db.sqlite3-journal
 Thumbs.db
 
 # Secrets - NEVER commit these
-**/settings.py
 **/local_settings.py
 *.key
 *.pem
+# Note: settings.py should be tracked, but without secrets
 
 # Node (frontend)
 node_modules/
