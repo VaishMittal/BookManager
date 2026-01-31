@@ -5,6 +5,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.views.decorators.csrf import csrf_exempt
+from .ai_service import generate_book_summary
 
 @csrf_exempt
 @api_view(['POST'])
@@ -47,4 +48,33 @@ def list_books(request):
         return paginator.get_paginated_response(serializer.data)
     except Exception as e:
         return Response({"error": str(e), "detail": "Error fetching books. Please ensure database migrations are run."}, status=500)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def generate_ai_summary(request):
+    """
+    Generate AI summary for a book based on title, author, and optional ISBN.
+    """
+    book_name = request.data.get('book_name')
+    author_name = request.data.get('author_name')
+    isbn = request.data.get('isbn')
+    
+    if not book_name or not author_name:
+        return Response({
+            "error": "book_name and author_name are required"
+        }, status=400)
+    
+    summary = generate_book_summary(book_name, author_name, isbn)
+    
+    if summary:
+        return Response({
+            "summary": summary,
+            "success": True
+        })
+    else:
+        return Response({
+            "error": "Failed to generate summary. Please check if GROQ_API_KEY is set correctly.",
+            "success": False
+        }, status=500)
 

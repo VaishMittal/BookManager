@@ -12,7 +12,35 @@ function AddBook() {
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [generatingSummary, setGeneratingSummary] = useState(false);
   const navigate = useNavigate();
+
+  const generateAISummary = async () => {
+    if (!book_name || !author_name) {
+      alert("Please enter book title and author name first");
+      return;
+    }
+
+    setGeneratingSummary(true);
+    try {
+      const response = await axios.post("http://localhost:8000/api/generate-summary/", {
+        book_name,
+        author_name,
+        isbn: isbn || null,
+      });
+      
+      if (response.data.success && response.data.summary) {
+        setDescription(response.data.summary);
+      } else {
+        alert("Failed to generate summary. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error generating summary:", error);
+      alert(error.response?.data?.error || "Error generating summary. Please check if GROQ_API_KEY is configured.");
+    } finally {
+      setGeneratingSummary(false);
+    }
+  };
 
   const addBook = async () => {
     if (!book_name || !author_name || !isbn || !price || !quantity || !description) {
@@ -136,8 +164,13 @@ function AddBook() {
                 rows={6}
                 disabled={loading}
               ></textarea>
-              <button className="generate-ai-button" type="button" disabled>
-                Generate with AI *
+              <button 
+                className="generate-ai-button" 
+                type="button" 
+                onClick={generateAISummary}
+                disabled={generatingSummary || loading || !book_name || !author_name}
+              >
+                {generatingSummary ? "Generating..." : "Generate with AI"}
               </button>
             </div>
 
