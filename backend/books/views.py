@@ -5,7 +5,8 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.pagination import PageNumberPagination
 from django.views.decorators.csrf import csrf_exempt
-from .ai_service import generate_book_summary
+from .ai_service import generate_book_summary, chat_with_ai
+import json
 
 @csrf_exempt
 @api_view(['POST'])
@@ -75,6 +76,77 @@ def generate_ai_summary(request):
     else:
         return Response({
             "error": "Failed to generate summary. Please check if GROQ_API_KEY is set correctly.",
+            "success": False
+        }, status=500)
+
+
+@api_view(['GET'])
+def get_book(request, book_id):
+    """
+    Get book details by ID.
+    """
+    try:
+        book = Book.objects.get(id=book_id)
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+    except Book.DoesNotExist:
+        return Response({"error": "Book not found"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def send_chat_message(request):
+    """
+    Send a chat message to AI about a book.
+    """
+    book_id = request.data.get('book_id')
+    user_message = request.data.get('message')
+    conversation_history = request.data.get('conversation_history', [])
+    
+    if not book_id or not user_message:
+        return Response({
+            "error": "book_id and message are required"
+        }, status=400)
+    
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return Response({"error": "Book not found"}, status=404)
+    
+    # Convert conversation history to proper format if it's a string
+    if isinstance(conversation_history, str):
+        try:
+            conversation_history = json.loads(conversation_history)
+        except:
+            conversation_history = []
+    
+    # Ensure conversation history is in the right format
+    formatted_history = []
+    for msg in conversation_history:
+        if isinstance(msg, dict) and 'role' in msg and 'content' in msg:
+            formatted_history.append({
+                "role": msg['role'],
+                "content": msg['content']
+            })
+    
+    # Get AI response
+    ai_response = chat_with_ai(
+        book.book_name,
+        book.author_name,
+        user_message,
+        formatted_history if formatted_history else None
+    )
+    
+    if ai_response:
+        return Response({
+            "response": ai_response,
+            "success": True
+        })
+    else:
+        return Response({
+            "error": "Failed to get AI response. Please check if GROQ_API_KEY is set correctly.",
             "success": False
         }, status=500)
 

@@ -93,7 +93,11 @@ function BookList() {
                       <td className="price">₹{b.price ? parseFloat(b.price).toFixed(2) : '0.00'}</td>
                       <td className="quantity">{b.quantity ?? 0}</td>
                       <td className="actions">
-                        <button className="action-button" title="View details">
+                        <button 
+                          className="action-button" 
+                          title="View chat history"
+                          onClick={() => navigate(`/chat/${b.id}`)}
+                        >
                           👁
                         </button>
                       </td>
